@@ -3,11 +3,13 @@
 import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown, Trash2 } from 'lucide-react';
+import { ArrowLeft, Activity, Heart, Calendar, Download, ChevronDown, Trash2, Flame, TrendingUp } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip as RechartsTooltip, XAxis, YAxis } from 'recharts';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import MoodPieChart from '@/components/MoodPieChart';
 import MoodBarChart from '@/components/MoodBarChart';
 import { MoodStats } from '@/components/MoodStats';
+import { buildHourlyDistribution, buildMoodTrendData, getMoodStreakSummary } from '@/lib/moodAnalytics';
 import { useMoodStore } from '@/lib/useMoodStore';
 import { useServerAnalytics } from '@/hooks/useServerAnalytics';
 
@@ -70,6 +72,39 @@ export default function AnalyticsPage() {
         count: count as number,
       }));
   }, [stats.moodCounts]);
+
+  const trendData = useMemo(() => {
+    return buildMoodTrendData(
+      moodHistory.map(entry => ({
+        timestamp: entry.timestamp,
+        mood: entry.emotion || entry.mood,
+        emotion: entry.emotion,
+        notes: entry.notes,
+      }))
+    );
+  }, [moodHistory]);
+
+  const hourlyData = useMemo(() => {
+    return buildHourlyDistribution(
+      moodHistory.map(entry => ({
+        timestamp: entry.timestamp,
+        mood: entry.emotion || entry.mood,
+        emotion: entry.emotion,
+        notes: entry.notes,
+      }))
+    );
+  }, [moodHistory]);
+
+  const streakSummary = useMemo(() => {
+    return getMoodStreakSummary(
+      moodHistory.map(entry => ({
+        timestamp: entry.timestamp,
+        mood: entry.emotion || entry.mood,
+        emotion: entry.emotion,
+        notes: entry.notes,
+      }))
+    );
+  }, [moodHistory]);
 
   const handleClearHistory = () => {
     if (confirm('Are you sure you want to clear your entire mood history?')) {
@@ -200,6 +235,69 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className="grid lg:grid-cols-[1.1fr_0.9fr] gap-6"
+              >
+                <div className="bg-card/80 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-border">
+                  <div className="mb-4 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                    <h3 className="text-xl font-bold text-foreground">Weekly Mood Trend</h3>
+                  </div>
+                  <div className="h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={trendData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis dataKey="label" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                        <YAxis allowDecimals={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                        <RechartsTooltip />
+                        <Line type="monotone" dataKey="count" stroke="#8b5cf6" strokeWidth={3} dot={{ r: 4 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                <div className="bg-card/80 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-border">
+                  <div className="mb-4 flex items-center gap-2">
+                    <Flame className="w-5 h-5 text-orange-500" />
+                    <h3 className="text-xl font-bold text-foreground">Peak Mood Hours</h3>
+                  </div>
+                  <div className="h-72">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={hourlyData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                        <XAxis dataKey="hour" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                        <YAxis allowDecimals={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                        <RechartsTooltip />
+                        <Bar dataKey="count" radius={[6, 6, 0, 0]} fill="#f59e0b" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="grid md:grid-cols-3 gap-4"
+              >
+                <div className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm">
+                  <p className="text-sm text-muted-foreground">Current streak</p>
+                  <p className="mt-2 text-2xl font-semibold text-foreground">{streakSummary.currentStreak} day{streakSummary.currentStreak === 1 ? '' : 's'}</p>
+                </div>
+                <div className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm">
+                  <p className="text-sm text-muted-foreground">Longest streak</p>
+                  <p className="mt-2 text-2xl font-semibold text-foreground">{streakSummary.longestStreak} day{streakSummary.longestStreak === 1 ? '' : 's'}</p>
+                </div>
+                <div className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm">
+                  <p className="text-sm text-muted-foreground">Latest reflection</p>
+                  <p className="mt-2 text-lg font-semibold text-foreground">{streakSummary.latestEntryDate ? new Date(streakSummary.latestEntryDate).toLocaleDateString() : 'No entries yet'}</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
                 className="grid md:grid-cols-2 gap-6"
               >
                 <MoodPieChart data={moodData} />
@@ -209,7 +307,7 @@ export default function AnalyticsPage() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.35 }}
                 className="bg-card/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-border"
               >
                 <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
