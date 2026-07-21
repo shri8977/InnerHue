@@ -26,6 +26,7 @@ export interface Suggestion {
   author: string;
   keywords: string[];
   music: string;
+  productivityTips?: string[];
 }
 
 export interface MoodStats {

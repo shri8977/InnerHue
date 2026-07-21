@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 export interface CustomMood {
   id: string;
   name: string;
@@ -137,66 +135,4 @@ export const CustomMoodStorage = {
 export function getCombinedMoods(defaultMoods: Mood[]): Mood[] {
   const customMoods = CustomMoodStorage.getCustomMoods();
   return [...defaultMoods, ...customMoods];
-}
-
-/**
- * Hook for listening to custom mood changes
- */
-export function useCustomMoods(defaultMoods: Mood[] = []) {
-  const [customMoods, setCustomMoods] = useState<CustomMood[]>([]);
-  const isClient = typeof window !== 'undefined';
-
-  useEffect(() => {
-    if (!isClient) return;
-
-    // Load initial custom moods
-    const loadCustomMoods = () => {
-      const moods = CustomMoodStorage.getCustomMoods();
-      setCustomMoods(moods);
-    };
-
-    loadCustomMoods();
-
-    // Listen for custom mood updates
-    const handleCustomMoodsUpdate = (event: CustomEvent) => {
-      setCustomMoods(event.detail);
-    };
-
-    window.addEventListener('customMoodsUpdated', handleCustomMoodsUpdate as EventListener);
-
-    return () => {
-      window.removeEventListener('customMoodsUpdated', handleCustomMoodsUpdate as EventListener);
-    };
-  }, [isClient]);
-
-  if (!isClient) {
-    return {
-      allMoods: defaultMoods,
-      customMoods: [],
-      addCustomMood: () => Promise.reject(new Error('Not available on server')),
-      deleteCustomMood: () => false,
-      refreshMoods: () => { }
-    };
-  }
-
-  const addCustomMood = async (moodData: Omit<CustomMood, 'id' | 'isCustom' | 'createdAt'>): Promise<CustomMood> => {
-    return CustomMoodStorage.saveCustomMood(moodData);
-  };
-
-  const deleteCustomMood = (moodId: string): boolean => {
-    return CustomMoodStorage.deleteCustomMood(moodId);
-  };
-
-  const refreshMoods = () => {
-    const moods = CustomMoodStorage.getCustomMoods();
-    setCustomMoods(moods);
-  };
-
-  return {
-    allMoods: getCombinedMoods(defaultMoods),
-    customMoods,
-    addCustomMood,
-    deleteCustomMood,
-    refreshMoods
-  };
 }
