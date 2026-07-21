@@ -2,39 +2,79 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Sparkles, BarChart3, Shield, Rocket } from 'lucide-react';
+import { Sparkles, BarChart3, Shield, Rocket, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function Insights() {
   return (
-    <div className="relative min-h-screen overflow-hidden px-6 py-24 bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground">
+    <div className="relative min-h-screen overflow-hidden px-6 py-24 bg-gradient-to-br from-slate-50 via-white to-cyan-50 dark:from-[hsl(var(--page-gradient-from))] dark:via-[hsl(var(--page-gradient-via))] dark:to-[hsl(var(--page-gradient-to))] text-foreground dark:text-white">
 
       {/* ✨ Floating Particles */}
       <Particles />
 
       <main id="main" className="max-w-6xl mx-auto relative z-10">
 
-        {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+        {/* Header with Back Button and Theme Toggle */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-6xl md:text-7xl font-extrabold text-center mb-16
-          bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400
-          bg-clip-text text-transparent"
+          transition={{ duration: 0.5 }}
+          className="mb-16 relative"
         >
-          Insights
-        </motion.h1>
+          {/* Back Link */}
+          <motion.div
+            whileHover={{ x: -4 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="inline-block"
+          >
+            <Link
+              href="/"
+              className="inline-flex items-center text-muted-foreground dark:text-white/60 hover:text-foreground dark:hover:text-white mb-6 transition-colors duration-200 group"
+            >
+              <ChevronLeft className="w-5 h-5 mr-1 transition-transform duration-200 group-hover:-translate-x-1" />
+              Back to Home
+            </Link>
+          </motion.div>
+
+          <div className="absolute right-0 top-0">
+            <ThemeToggle />
+          </div>
+
+          {/* Title */}
+          <div className="text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-6xl md:text-7xl font-extrabold text-center mb-16
+              bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400
+              bg-clip-text text-transparent"
+            >
+              Insights
+            </motion.h1>
+          </div>
+        </motion.header>
 
         {/* Description */}
-        <p className="text-xl text-muted-foreground dark:text-gray-300 text-center max-w-3xl mx-auto mb-20 leading-relaxed">
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="text-xl text-muted-foreground dark:text-gray-300 text-center max-w-3xl mx-auto mb-20 leading-relaxed"
+        >
           Insight is a sudden, clear, and deep understanding of a complex situation —
           a <span className="text-yellow-300 font-semibold">lightbulb moment</span>
           where clarity replaces confusion and deeper truth reveals itself.
-        </p>
+        </motion.p>
 
         {/* Sections */}
-        <div className="grid md:grid-cols-2 gap-12">
-
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="grid md:grid-cols-2 gap-12"
+        >
           <PremiumSection
             icon={<Sparkles />}
             title="Project Insights"
@@ -88,8 +128,30 @@ export default function Insights() {
               "Blend technology with human empathy."
             ]}
           />
+        </motion.div>
 
-        </div>
+        {/* Closing Statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="text-center py-16 mt-12"
+        >
+          <motion.h3
+            whileHover={{
+              scale: 1.05,
+              textShadow: '0 0 20px rgba(236, 72, 153, 0.6)',
+            }}
+            transition={{ duration: 0.3 }}
+            className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-purple-300 mb-6 inline-block"
+          >
+            &quot;Every insight is a step toward understanding yourself better.&quot;
+          </motion.h3>
+          <p className="text-muted-foreground dark:text-gray-400">
+            Your emotional journey matters — keep exploring, keep growing.
+          </p>
+        </motion.div>
+
       </main>
     </div>
   );

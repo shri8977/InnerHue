@@ -6,6 +6,11 @@ import { Github, Linkedin, Instagram } from "lucide-react";
 import Image from 'next/image';
 import contributors from '@/data/contributors.json';
 
+interface Contributor {
+  login: string;
+  avatar_url: string;
+}
+
 export function Footer() {
   const pathname = usePathname();
 
@@ -152,7 +157,8 @@ export function Footer() {
               </div>
 
               <div className="mt-4 flex -space-x-3">
-                {contributors && contributors.slice(0, 8).map((c: any, i: number) => (
+                // TO
+                  {contributors && contributors.slice(0, 8).map((c: Contributor, i: number) => (
                   <a
                     key={c.login + i}
                     href="/contributors"

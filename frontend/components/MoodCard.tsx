@@ -50,7 +50,9 @@ export function MoodCard({ mood, index, isSelected, onSelect, onDelete, onKeyDow
       ? 'rgba(18,18,32,0.65)'
       : 'rgba(255,255,255,0.25)';
 
-  const labelColor = isSelected ? (isDark ? '#f3f4f6' : '#1f2937') : '#ffffff';
+  const labelColor = isSelected
+  ? (isDark ? '#f3f4f6' : '#1f2937')
+  : (isDark ? '#ffffff' : '#374151'); // Dark gray for light theme
 
   return (
     <motion.div

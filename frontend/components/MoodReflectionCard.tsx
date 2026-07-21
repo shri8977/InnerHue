@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Wind, Music, X } from 'lucide-react';
 import { useState } from 'react';
+import React from 'react';
 
 interface MoodReflectionCardProps {
   mood: {
@@ -80,7 +81,8 @@ export function MoodReflectionCard({ mood, suggestion, onClose }: MoodReflection
 
   // Suggest actions based on mood
   const getSuggestedActions = (moodId: string) => {
-    const actionMap: Record<string, Array<{ icon: any; label: string; action: string }>> = {
+    // TO
+    const actionMap: Record<string, Array<{ icon: React.ElementType; label: string; action: string }>> = {
       happy: [
         { icon: BookOpen, label: 'Journal', action: 'Capture this joyful moment in writing' },
         { icon: Music, label: 'Music', action: 'Dance to uplifting tunes' }
