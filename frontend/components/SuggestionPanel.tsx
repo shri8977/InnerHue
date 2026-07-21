@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { RefreshCw, MessageCircle, Quote as QuoteIcon, Hash, Music } from 'lucide-react';
+import { RefreshCw, MessageCircle, Hash, Music } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useMoodStore } from '@/lib/useMoodStore';
 import {
@@ -15,6 +15,7 @@ import { QuoteSkeleton } from '@/components/QuoteSkeleton';
 import { Quote } from '@/data/fallbackQuotes';
 import { Mood, Suggestion } from '@/types/mood';
 import { MoodQuoteCard } from '@/components/MoodQuoteCard';
+import { ProductivityTips } from '@/components/ProductivityTips';
 
 interface SuggestionPanelProps {
   suggestions: Suggestion;
@@ -148,6 +149,8 @@ const handleSaveNotes = () => {
             </div>
           </div>
         </motion.div>
+
+        <ProductivityTips mood={mood} tips={suggestions.productivityTips ?? []} />
 
         {/* Music Soundscape (Spotify) */}
         <motion.div
