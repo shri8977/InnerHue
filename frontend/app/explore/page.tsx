@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { MoodCard } from '@/components/MoodCard';
 import { FloatingBackground } from '@/components/FloatingBackground';
+import RandomMoodButton from '@/components/RandomMoodButton';
 import { Heart, BarChart3, Music, ArrowLeft, Search, X } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -298,6 +299,13 @@ export default function ExplorePage() {
                 )}
               </AnimatePresence>
             </motion.div>
+          )}
+
+          {/* Surprise Me Button */}
+          {mounted && (
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <RandomMoodButton moods={moods} />
+            </div>
           )}
 
           {/* Continue Button */}

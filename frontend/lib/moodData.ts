@@ -2456,6 +2456,165 @@ export const MoodData = {
     return Object.values(this.moods);
   },
 
+  productivityTips: {
+    happy: [
+      "Capture joyful moments in writing or celebration.",
+      "Share a small act of kindness to keep the energy flowing.",
+      "Tackle a creative task with ease and enjoyment.",
+      "Plan a fun break that honors your positive mood.",
+    ],
+    sad: [
+      "Practice gentle self-care for your current feelings.",
+      "Write about what feels heavy and what you need.",
+      "Do a calming movement or soothing activity.",
+      "Create a small comfort ritual for yourself.",
+    ],
+    anxious: [
+      "Break tasks into smaller, manageable steps.",
+      "Organize your priorities with a short list.",
+      "Take brief mindful breaks to stay grounded.",
+      "Focus on one clear action at a time.",
+    ],
+    excited: [
+      "Channel your energy into a meaningful project.",
+      "Brainstorm ideas freely and capture them quickly.",
+      "Start a short creative sprint while your focus is high.",
+      "Celebrate progress with a quick pause.",
+    ],
+    calm: [
+      "Block a deep work session while your mind feels steady.",
+      "Read, research, or plan in a quiet space.",
+      "Map out long-term goals with mindful attention.",
+      "Reflect on your next steps without rushing.",
+    ],
+    angry: [
+      "Name one need beneath the feeling before acting.",
+      "Choose a controlled physical release like movement.",
+      "Redirect energy into a practical task or decision.",
+      "Pause and breathe before choosing your next step.",
+    ],
+    confused: [
+      "Clarify one priority with a quick note.",
+      "Ask yourself what matters most right now.",
+      "Simplify options into easy yes/no choices.",
+      "Take one small step forward to build direction.",
+    ],
+    grateful: [
+      "Write a gratitude list to deepen this feeling.",
+      "Reach out with a thank-you note or message.",
+      "Notice small wins and savor them gently.",
+      "Build on this positive energy with a kind task.",
+    ],
+    lonely: [
+      "Connect with a kind friend or send a message.",
+      "Write a gentle note to yourself about how you feel.",
+      "Do a quiet creative activity that feels nurturing.",
+      "Create a peaceful space to sit with your emotions.",
+    ],
+    hopeful: [
+      "Outline a hopeful next step for your plans.",
+      "Set one achievable intention with optimism.",
+      "Collect ideas in a mood board or list.",
+      "Begin a small project while your energy is bright.",
+    ],
+    stressed: [
+      "Break tasks into bite-sized pieces and choose one.",
+      "Prioritize what needs attention first.",
+      "Take a short restorative pause before continuing.",
+      "Choose one clear next action and start it gently.",
+    ],
+    peaceful: [
+      "Practice mindful planning with calm awareness.",
+      "Tend to a creative task in a slow, steady way.",
+      "Review your values and what matters most.",
+      "Move deliberately through one thoughtful activity.",
+    ],
+    energized: [
+      "Start a focused power session with intention.",
+      "Tackle a task that needs momentum right now.",
+      "Turn ideas into quick, practical action.",
+      "Use this energy to clear a meaningful goal.",
+    ],
+    overwhelmed: [
+      "Take a gentle pause before deciding what to do.",
+      "Set one small, manageable goal first.",
+      "Clear your workspace or mind in tiny steps.",
+      "Ask for support or simplify one thing.",
+    ],
+    content: [
+      "Savor the moment with a thoughtful, steady task.",
+      "Tidy or prepare your space for what comes next.",
+      "Engage in a calm creative activity.",
+      "Capture what feels good in a short note.",
+    ],
+    frustrated: [
+      "Shift focus with a short break and reset.",
+      "Turn irritation into a small practical fix.",
+      "Write down what you want to change next.",
+      "Choose a single manageable task to move forward.",
+    ],
+    inspired: [
+      "Work on a creative project that feels exciting.",
+      "Brainstorm ideas and let them flow freely.",
+      "Write or design something new with curiosity.",
+      "Learn something fresh that sparks your interest.",
+    ],
+    melancholy: [
+      "Let your feelings guide a quiet creative act.",
+      "Journal about what you miss with kindness.",
+      "Create a gentle ritual that brings comfort.",
+      "Notice small moments of warmth or ease.",
+    ],
+    motivated: [
+      "Set a clear action plan and take the first step.",
+      "Start a productive task with focused intent.",
+      "Track progress in small wins.",
+      "Use your momentum to move one step ahead.",
+    ],
+    vulnerable: [
+      "Give yourself permission to rest and be kind.",
+      "Write about what feels true to you.",
+      "Reach out for gentle connection if you want.",
+      "Do something softly nurturing for yourself.",
+    ],
+    empowered: [
+      "Tackle a goal with confidence and care.",
+      "Take a decisive next step that feels right.",
+      "Celebrate a win while staying grounded.",
+      "Pair action with self-respect.",
+    ],
+    nostalgic: [
+      "Capture meaningful memories in writing.",
+      "Look through old moments with compassion.",
+      "Create something inspired by the past.",
+      "Turn reflection into a gentle intention.",
+    ],
+    jealous: [
+      "Notice what you truly want for yourself.",
+      "Shift energy toward your own next move.",
+      "Outline one goal aligned with your values.",
+      "Focus on self-growth rather than comparison.",
+    ],
+    proud: [
+      "Celebrate what you achieved with gratitude.",
+      "Set a new goal from this strength.",
+      "Share your success with a kind note.",
+      "Build on momentum mindfully.",
+    ],
+    curious: [
+      "Explore a new idea and take notes.",
+      "Research something intriguing.",
+      "Ask questions and follow what interests you.",
+      "Try a small experiment to learn more.",
+    ],
+    silly: [
+      "Channel playful energy into a light task.",
+      "Try a fun creative exercise.",
+      "Take a brief break to enjoy the moment.",
+      "Brainstorm ideas with a relaxed smile.",
+    ],
+  },
+
   getSuggestions(moodId: string) {
     // Check if it's a custom mood
     if (typeof window !== "undefined" && moodId.startsWith("custom_")) {
@@ -2468,20 +2627,35 @@ export const MoodData = {
         author: "InnerHue",
         keywords: ["reflection", "custom", "personal", "awareness"],
         music: "Personalized ambient music",
+        productivityTips: [
+          "Tune into your energy and choose a task that feels right for you.",
+          "Write down one goal that supports your mood.",
+          "Take a short mindful break before the next move.",
+        ],
       };
     }
 
     // Default mood suggestions
     const moodSuggestions =
       this.suggestions[moodId as keyof typeof this.suggestions] || [];
-    return (
+    const selectedSuggestion =
       moodSuggestions[Math.floor(Math.random() * moodSuggestions.length)] || {
         prompt: "Take a moment to breathe deeply and reflect on this feeling.",
         quote: "Every emotion has its place in the human experience.",
         author: "Unknown",
         keywords: ["reflection", "breathing", "awareness"],
         music: "Calming ambient music",
-      }
-    );
+      };
+    const tips =
+      this.productivityTips?.[moodId as keyof typeof this.productivityTips] || [
+        "Tune into your energy and choose a task that feels right for you.",
+        "Write down one goal that supports your mood.",
+        "Take a short mindful break before the next move.",
+      ];
+
+    return {
+      ...selectedSuggestion,
+      productivityTips: selectedSuggestion.productivityTips || tips,
+    };
   },
 };
